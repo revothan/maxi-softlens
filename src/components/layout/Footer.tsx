@@ -9,7 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/images/logo.png" alt="Maxi Softlens Logo" className="h-8 w-auto" />
+              <img src="https://nxhhdtdygdwkhuloqdoc.supabase.co/storage/v1/object/public/branding//maxi-softlens-logo.png" alt="Maxi Softlens Logo" className="h-8 w-auto" />
               <span className="text-lg font-bold">
                 Maxi Softlens
               </span>
