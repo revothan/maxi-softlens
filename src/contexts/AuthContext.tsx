@@ -66,25 +66,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  // Handle first login bonus
-  useEffect(() => {
-    const handleFirstLoginBonus = async () => {
-      if (user && !coins?.has_received_first_login_bonus) {
-        const { data, error } = await supabase.rpc('handle_first_login_bonus', {
-          user_uuid: user.id
-        });
-        
-        if (!error && data) {
-          refreshUserData();
-        }
-      }
-    };
-
-    if (user && coins) {
-      handleFirstLoginBonus();
-    }
-  }, [user, coins]);
-
   const refreshUserData = async () => {
     if (!user) return;
 
@@ -120,10 +101,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUp = async (email: string, password: string) => {
-    return await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      const result = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      
+      // If sign up is successful, we need to refresh user data to get the initial coin balance
+      if (result.data.user && !result.error) {
+        // Wait a moment for the database trigger to complete
+        setTimeout(async () => {
+          if (result.data.session) {
+            await refreshUserData();
+          }
+        }, 1000);
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Error signing up:', error);
+      return { error: error as Error, data: null };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
