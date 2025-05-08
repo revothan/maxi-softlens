@@ -6,8 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Gift, Coins } from 'lucide-react';
-import { formAnimations, addAnimationStyles } from '@/lib/animations';
+import { Loader2, Coins } from 'lucide-react';
 
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -25,16 +24,6 @@ const RegisterPage: React.FC = () => {
       navigate('/dashboard');
     }
   }, [session, navigate]);
-
-  // Add form animations
-  useEffect(() => {
-    const errorStyles = addAnimationStyles(formAnimations.formError);
-    const successStyles = addAnimationStyles(formAnimations.formSuccess);
-    return () => {
-      errorStyles.remove();
-      successStyles.remove();
-    };
-  }, []);
 
   const validateForm = () => {
     if (!email.trim()) {
@@ -66,13 +55,6 @@ const RegisterPage: React.FC = () => {
     setSuccess(null);
 
     if (!validateForm()) {
-      const form = document.getElementById('register-form');
-      if (form) {
-        form.classList.add('form-error');
-        setTimeout(() => {
-          form.classList.remove('form-error');
-        }, 500);
-      }
       return;
     }
 
@@ -81,35 +63,20 @@ const RegisterPage: React.FC = () => {
       const { error, data } = await signUp(email, password);
       
       if (error) {
+        console.error("Sign-up error:", error);
         setError(error.message);
-        const form = document.getElementById('register-form');
-        if (form) {
-          form.classList.add('form-error');
-          setTimeout(() => {
-            form.classList.remove('form-error');
-          }, 500);
-        }
       } else {
-        // Apply success animation
-        const form = document.getElementById('register-form');
-        if (form) {
-          form.classList.add('form-success');
-          setTimeout(() => {
-            form.classList.remove('form-success');
-          }, 500);
-        }
-        
         if (data?.session) {
-          // Auto-login successful
+          // Auto-login successful, redirect to dashboard
           navigate('/dashboard');
         } else {
           // Email confirmation might be required
-          setSuccess('Registration successful! Please check your email for verification instructions. You\'ll receive 50 bonus coins when you log in for the first time!');
+          setSuccess('Registration successful! Please check your email for verification instructions. You\'ll receive 50 bonus coins when you sign in!');
         }
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
       console.error('Registration error:', err);
+      setError('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -140,16 +107,16 @@ const RegisterPage: React.FC = () => {
           </p>
         </div>
         
-        <form id="register-form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             {error && (
-              <Alert variant="destructive" className="animate-in fade-in duration-300">
+              <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             
             {success && (
-              <Alert className="bg-green-50 text-green-800 border-green-200 animate-in fade-in duration-300">
+              <Alert className="bg-green-50 text-green-800 border-green-200">
                 <AlertDescription>{success}</AlertDescription>
               </Alert>
             )}
@@ -162,8 +129,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="your.email@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
-                className="border-input focus:border-primary"
+                disabled={loading}
               />
             </div>
             
@@ -174,8 +140,7 @@ const RegisterPage: React.FC = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                autoComplete="new-password"
-                className="border-input focus:border-primary"
+                disabled={loading}
               />
               <p className="text-xs text-muted-foreground">
                 Password must be at least 6 characters long
@@ -189,8 +154,7 @@ const RegisterPage: React.FC = () => {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                autoComplete="new-password"
-                className="border-input focus:border-primary"
+                disabled={loading}
               />
             </div>
           </CardContent>
@@ -198,7 +162,7 @@ const RegisterPage: React.FC = () => {
           <CardFooter className="flex flex-col gap-4">
             <Button 
               type="submit" 
-              className="w-full bg-primary hover:bg-primary/90" 
+              className="w-full" 
               disabled={loading}
             >
               {loading ? (
