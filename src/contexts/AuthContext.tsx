@@ -102,39 +102,63 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string) => {
     try {
-      const result = await supabase.auth.signUp({
+      // Use try-catch to better handle API errors
+      const response = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: window.location.origin + '/login',
+          data: {
+            full_name: email.split('@')[0]
+          }
+        }
       });
       
-      // If sign up is successful, we need to refresh user data to get the initial coin balance
-      if (result.data.user && !result.error) {
-        // Wait a moment for the database trigger to complete
+      if (response.error) {
+        console.error('Signup error:', response.error);
+        return response;
+      }
+      
+      // If sign up is successful with auto-confirmation
+      if (response.data?.user && response.data?.session) {
+        setUser(response.data.user);
+        setSession(response.data.session);
+        
+        // Give the trigger time to work
         setTimeout(async () => {
-          if (result.data.session) {
-            await refreshUserData();
-          }
+          await refreshUserData();
         }, 1000);
       }
       
-      return result;
+      return response;
     } catch (error) {
-      console.error('Error signing up:', error);
+      console.error('Error in signUp function:', error);
       return { error: error as Error, data: null };
     }
   };
 
   const signIn = async (email: string, password: string) => {
-    return await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const result = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      return result;
+    } catch (error) {
+      console.error('Error signing in:', error);
+      return { error: error as Error, data: null };
+    }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setProfile(null);
-    setCoins(null);
+    try {
+      await supabase.auth.signOut();
+      setProfile(null);
+      setCoins(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   const updateProfile = async (updates: Partial<Profiles>) => {
