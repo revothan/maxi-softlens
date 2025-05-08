@@ -8,12 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { CalendarIcon, Check, Loader2, LogOut, User, UserCircle } from 'lucide-react';
+import { Check, Loader2, LogOut, User, UserCircle } from 'lucide-react';
 import { FormEvent } from 'react';
 import { formAnimations, addAnimationStyles } from '@/lib/animations';
+import { format } from 'date-fns';
 
 const ProfilePage: React.FC = () => {
   const { user, profile, loading, signOut, updateProfile } = useAuth();
@@ -175,25 +173,16 @@ const ProfilePage: React.FC = () => {
             
             <div className="space-y-2">
               <Label htmlFor="birthdate">Birthdate</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {birthdate ? format(birthdate, 'PPP') : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={birthdate}
-                    onSelect={setBirthdate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <Input
+                id="birthdate"
+                type="date"
+                value={birthdate ? format(birthdate, 'yyyy-MM-dd') : ''}
+                onChange={(e) => {
+                  const date = e.target.value ? new Date(e.target.value) : undefined;
+                  setBirthdate(date);
+                }}
+                className="w-full"
+              />
               <p className="text-xs text-muted-foreground">
                 We'll use this to wish you a happy birthday and may send special rewards
               </p>
