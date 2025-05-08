@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
-export function Layout() {
+export const Layout: React.FC = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-1">
         <Outlet />
@@ -13,4 +13,4 @@ export function Layout() {
       <Footer />
     </div>
   );
-}
+};
