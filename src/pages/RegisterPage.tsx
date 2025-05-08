@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Gift, Coins } from 'lucide-react';
 import { formAnimations, addAnimationStyles } from '@/lib/animations';
 
 const RegisterPage: React.FC = () => {
@@ -104,7 +104,7 @@ const RegisterPage: React.FC = () => {
           navigate('/dashboard');
         } else {
           // Email confirmation might be required
-          setSuccess('Registration successful! Please check your email for verification instructions.');
+          setSuccess('Registration successful! Please check your email for verification instructions. You\'ll receive 50 bonus coins when you log in for the first time!');
         }
       }
     } catch (err) {
@@ -131,6 +131,15 @@ const RegisterPage: React.FC = () => {
             Join Maxi Softlens to earn rewards and shop your favorite lenses
           </CardDescription>
         </CardHeader>
+        
+        {/* Bonus information */}
+        <div className="mx-6 mb-4 p-3 bg-amber-50 rounded-lg border border-amber-200 flex items-center">
+          <Coins className="h-5 w-5 text-amber-500 mr-2 flex-shrink-0" />
+          <p className="text-sm text-amber-800">
+            <strong>Get 50 bonus coins</strong> when you sign up today!
+          </p>
+        </div>
+        
         <form id="register-form" onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             {error && (
