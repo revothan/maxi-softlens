@@ -17,7 +17,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between py-4">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center space-x-2">
-            <img src="/images/logo.png" alt="Maxi Softlens Logo" className="h-8 w-auto" />
+            <img src="https://nxhhdtdygdwkhuloqdoc.supabase.co/storage/v1/object/public/branding//maxi-softlens-logo.png" alt="Maxi Softlens Logo" className="h-8 w-auto" />
             <span className="hidden font-bold sm:inline-block">
               Maxi Softlens
             </span>
@@ -66,7 +66,7 @@ export function Header() {
         <div className="fixed inset-0 z-50 bg-background md:hidden">
           <div className="container flex h-16 items-center justify-between py-4">
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/images/logo.png" alt="Maxi Softlens Logo" className="h-8 w-auto" />
+              <img src="https://nxhhdtdygdwkhuloqdoc.supabase.co/storage/v1/object/public/branding//maxi-softlens-logo.png" alt="Maxi Softlens Logo" className="h-8 w-auto" />
               <span className="font-bold">
                 Maxi Softlens
               </span>
