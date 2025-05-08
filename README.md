@@ -17,6 +17,40 @@ A modern, SEO-optimized product website for Maxi Softlens, a company that sells 
 - **Shopping Cart**: Allow users to add products to cart before checkout
 - **Responsive Design**: Mobile-first approach ensuring a great experience on all devices
 - **SEO Optimizations**: Semantic HTML, meta tags, and responsive design
+- **User Authentication**: Email/password login and registration
+- **Coin-Based Reward System**: Animated rewards with sound effects
+- **User Profile Management**: Manage personal details with validation
+- **Interactive Reward Redemption**: Visually engaging reward system
+
+## Member System Features
+
+### Authentication System
+- Modern, mobile-responsive login and registration
+- Validation for user-friendly errors
+- Branded visuals matching Maxi Softlens identity
+- Auto-redirect to dashboard upon successful login
+
+### Coin Reward System
+- First-time login bonus: +50 coins
+- Animated coin counter on dashboard
+- Visual effects when coins are earned
+- Progress bars for reward milestones
+
+### Reward Tiers
+- 50 Coins → 5% Discount
+- 150 Coins → 20% Discount
+- 1000 Coins → Free X2 Chi Vol. 2 Softlens
+
+### Rewards Page
+- Interactive reward cards with unlock states
+- Animation effects on reward redemption
+- Confirmation modal with coin deduction animation
+- Active/used/expired states for redeemed rewards
+
+### Profile Management
+- Update personal details (name, WhatsApp number, birthdate, address)
+- Input validation with visual feedback
+- Animation on successful save
 
 ## Local Development
 
@@ -50,35 +84,23 @@ A modern, SEO-optimized product website for Maxi Softlens, a company that sells 
 
 ## Supabase Backend Setup
 
-The project uses Supabase as a backend service. Follow these steps to set it up:
+The project uses Supabase as a backend service. The database schema includes:
 
-1. Create a new project on [Supabase](https://supabase.com)
-2. Set up the database tables:
-   
-   ```sql
-   -- Create products table
-   CREATE TABLE products (
-     id SERIAL PRIMARY KEY,
-     name TEXT NOT NULL,
-     series TEXT NOT NULL,
-     color TEXT NOT NULL,
-     description TEXT,
-     image_url TEXT,
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
+### Core Product Tables
+- `products`: Stores product information
+- `product_powers`: Stores power options for products
 
-   -- Create product powers table
-   CREATE TABLE product_powers (
-     id SERIAL PRIMARY KEY,
-     product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
-     power TEXT NOT NULL,
-     quantity INTEGER NOT NULL,
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
-   ```
+### Member System Tables
+- `profiles`: Stores user profile information
+- `coins`: Tracks user coin balances
+- `coin_transactions`: Records coin earning/spending history
+- `rewards`: Defines available rewards
+- `user_rewards`: Tracks redeemed rewards
 
-3. Add the product data for the X2 CHI series as specified in the requirements
-4. Set up appropriate security permissions for your tables
+### Helper Functions
+- `add_coins()`: Manages coin transactions
+- `handle_first_login_bonus()`: Awards first-time login bonus
+- `redeem_reward()`: Processes reward redemptions
 
 ## Deployment to Netlify
 
@@ -113,10 +135,22 @@ maxi-softlens/
 ├── public/             # Static assets
 ├── src/
 │   ├── components/     # UI components
+│   │   ├── layout/     # Layout components (Header, Footer)
+│   │   └── ui/         # UI components from shadcn
 │   ├── contexts/       # React contexts
+│   │   ├── AuthContext.tsx    # Authentication context
+│   │   └── RewardsContext.tsx # Rewards management context
 │   ├── hooks/          # Custom hooks
 │   ├── lib/            # Utility functions
+│   │   ├── animations.ts     # Animation utilities
+│   │   ├── supabase.ts       # Supabase client
+│   │   └── utils.ts          # General utilities
 │   ├── pages/          # Page components
+│   │   ├── DashboardPage.tsx  # User dashboard
+│   │   ├── LoginPage.tsx      # Login page
+│   │   ├── ProfilePage.tsx    # Profile management
+│   │   ├── RegisterPage.tsx   # Registration page
+│   │   └── RewardsPage.tsx    # Rewards management
 │   ├── types/          # TypeScript type definitions
 │   ├── App.tsx         # Main app component
 │   └── main.tsx        # Entry point
