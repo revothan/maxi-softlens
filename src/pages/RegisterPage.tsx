@@ -121,7 +121,7 @@ const RegisterPage: React.FC = () => {
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <img 
-              src="/logo.png" 
+              src="/images/logo.png" 
               alt="Maxi Softlens" 
               className="h-12 md:h-16"
             />
